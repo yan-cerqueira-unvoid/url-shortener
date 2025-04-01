@@ -57,10 +57,7 @@ func (parser *URLParser) Parse(rawURL string) (*URLParseResult, error) {
 		}
 	}
 
-	normalized := strings.ToLower(rawURL)
-	if strings.HasSuffix(normalized, "/") {
-		normalized = normalized[:len(normalized)-1]
-	}
+	normalized := strings.TrimSuffix(strings.ToLower(rawURL), "/")
 
 	return &URLParseResult{
 		OriginalURL: rawURL,
@@ -71,7 +68,6 @@ func (parser *URLParser) Parse(rawURL string) (*URLParseResult, error) {
 		IsValid:     true,
 	}, nil
 }
-
 func (parser *URLParser) ParseLogEntry(logEntry string) (map[string]string, error) {
 	// Example log format: [timestamp] "GET /abc123 HTTP/1.1" 301 "Mozilla/5.0 ..." "192.168.1.1" "referrer"
 	data := make(map[string]string)
