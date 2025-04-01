@@ -1,0 +1,45 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+*.test
+
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+go.work
+
+/bin/
+/dist/
+
+.idea/
+.vscode/
+*.swp
+*.swo
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+*.log
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+debug
+__debug_bin
+
+# Go module cache
+# Uncomment if you want to ignore the local module cache
+# /pkg/mod/
