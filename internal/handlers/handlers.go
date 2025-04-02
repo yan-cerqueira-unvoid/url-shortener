@@ -4,13 +4,22 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yan-cerqueira-unvoid/url-shortener/internal/models"
 	"github.com/yan-cerqueira-unvoid/url-shortener/internal/parser"
-	"github.com/yan-cerqueira-unvoid/url-shortener/internal/services"
 )
 
 type ShortenURLRequest struct {
 	URL        string `json:"url" binding:"required"`
 	CustomCode string `json:"custom_code,omitempty"`
+}
+
+type URLServiceInterface interface {
+	ShortenURL(originalURL string, customCode string) (*models.URL, error)
+	GetURL(shortCode string) (*models.URL, error)
+}
+
+type URLParserInterface interface {
+	Parse(rawURL string) (*parser.URLParseResult, error)
 }
 
 func HomeHandler() gin.HandlerFunc {
@@ -26,7 +35,7 @@ func HomeHandler() gin.HandlerFunc {
 	}
 }
 
-func ShortenURLHandler(urlService *services.URLService, urlParser *parser.URLParser) gin.HandlerFunc {
+func ShortenURLHandler(urlService URLServiceInterface, urlParser URLParserInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var request ShortenURLRequest
 		if err := c.ShouldBindJSON(&request); err != nil {
@@ -55,7 +64,7 @@ func ShortenURLHandler(urlService *services.URLService, urlParser *parser.URLPar
 	}
 }
 
-func RedirectHandler(urlService *services.URLService) gin.HandlerFunc {
+func RedirectHandler(urlService URLServiceInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		shortCode := c.Param("shortCode")
 
