@@ -1,0 +1,36 @@
+name: Go Lint & Test
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    name: Lint Go Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # Checks out the code
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23.3" # Sets up Go 1.23.3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.54 # Uses golangci-lint version 1.54
+
+  test:
+    name: Test on Linux with Go
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23.3" # Sets up Go 1.23.3
+      - uses: actions/checkout@v3 # Checks out the code
+      - name: Test
+        run: go test -v ./... # Runs Go tests
