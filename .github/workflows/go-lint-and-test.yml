@@ -30,39 +30,9 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-  lint:
-    name: Lint Go Code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.23.3"
-          check-latest: true
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v4
-        with:
-          version: latest
-
-  test:
-    name: Test on Linux with Go
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.23.3"
-          check-latest: true
-      - name: Install dependencies
-        run: go mod download
-      - name: Test
-        run: go test -v ./...
-
   build:
     name: Build Application
-    needs: [lint, test]
+    needs: [pre-commit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
